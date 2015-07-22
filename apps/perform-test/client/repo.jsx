@@ -55,6 +55,7 @@ module.exports = React.createClass({
         scripts={this.state.scripts}
         teardown={this.state.teardown}
         setup={this.state.setup}
+        updateScript={function(){}}
       />
       <table>{this.state.scripts.map(function(script){
         return <Script script={script} />;

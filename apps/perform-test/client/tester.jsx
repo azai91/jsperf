@@ -3,48 +3,54 @@ require('jslitmus');
 console.log(jslitmus);
 var vm = require('vm-shim');
 var Script = require('./script');
+var async = require('async');
+var querystring = require('querystring');
+var Chart = require('./test-chart');
 
 module.exports = React.createClass({
   getInitialState: function(){
-    return {state:"stopped"};
+    return {state:"stopped",tests:[]};
   },startTests: function(){
     if(this.state.state !== "stopped") return;
     console.log('starting tests');
     var _this = this;
-    this.props.scripts.forEach(function(script,next){
+    var tests = this.props.scripts.map(function(script){
       var context = {ref_holder:{}};
       console.log(_this.props.setup);
       vm.runInNewContext('ref_holder.value = function(){'+(_this.props.setup.text||"")+'\n'+script.text+'}',context);
       console.log(context.ref_holder.value.toString());
-      var test = jslitmus.test(script.title, context.ref_holder.value);
-      script.test = test;
+      var test = new jslitmus.Test(script.title, context.ref_holder.value);
       test.script = script;
+      return test;
+    });
+    async.each(tests,function(test,next){
+      var script = test.script;
       script.state = "pending";
+      test.on('start',function(test){
+        console.log(test.script.title,' started');
+        script.state = 'running';
+        _this.props.updateScript(test.script);
+      });
+      test.on('complete', function(test) {
+        console.log(test.script.title,' finished');
+        script.state = 'finished';
+        _this.props.updateScript(test.script);
+        next();
+      });
+      test.run();
+    },function(e){
+      console.log('finished tests');
+      _this.setState({
+        state:"finished"
+      });
     });
     console.log('added tests');
-    jslitmus.on('start',function(test){
-      console.log(test.script.title,' started');
-      test.script.state = 'running';
-    });
-    jslitmus.on('complete', function(test) {
-      console.log(test.script.title,' finished');
-      test.script.state = 'finished';
-    });
-    // Log the test results
-    jslitmus.on('all_complete', function(test) {
-      console.log('finished tests');
-      _this.setState({state:"finished",chart:jslitmus.getGoogleChart()});
-    });
-    // Run it!
-    jslitmus.runAll();
-    _this.setState({state:"running"});
-  },forkTests: function(){
-    window.location = this.props.repoUrl;
+    _this.setState({state:"running",tests:tests});
   },render: function(){
     return (<div>{[
       <h1>{this.state.state}</h1>,
       <button onClick={this.startTests} >Start Tests</button>,
-      <p>{this.state.chart?<img src={this.state.chart} />:"Press start tests"}</p>
+      <p>{this.state.state==='finished'?<Chart tests={this.state.tests} />:"Press start tests"}</p>
     ]}</div>);
   }
 });
