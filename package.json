@@ -1,0 +1,22 @@
+{
+  "name": "jsperf",
+  "version": "1.0.0",
+  "description": "Redux of the JSPerf Site",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formula1/jsperf.git"
+  },
+  "author": "formula1 <samtobia@gmail.com> (https://github.com/formula1)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/formula1/jsperf/issues"
+  },
+  "homepage": "https://github.com/formula1/jsperf"
+}
