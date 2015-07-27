@@ -1,7 +1,12 @@
 var React = require('react');
 var querystring = require('querystring');
 
-console.log(querystring);
+/*
+  TODO: Everything in here
+
+  Special thanks to https://github.com/broofa/jslitmus
+
+*/
 
 
 var platform = (function(root) {
@@ -50,8 +55,28 @@ var platform = (function(root) {
 
 module.exports = React.createClass({
 
-  getInitialState: function(){
+  getInitialState: function(tests){
     return null;
+  },createData:function(){
+    var data = {
+      platform: {
+        name: platform.name,
+        version: platform.version,
+        os: platform.os
+      },
+      tests: tests.map(function(test){
+        return {
+          error: test.error,
+          hz: test.getHz(),
+          name: test.name,
+        };
+      }),
+      gist: {
+        id: this.props.gist.id,
+        owner: this.props.gist.owner,
+        isFork: this.props.gist.isFork
+      }
+    };
   },getGoogleChart:function(tests, normalize){
     console.log(platform);
     var chart_title = [
