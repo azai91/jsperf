@@ -7,6 +7,8 @@ var async = require('async');
 var querystring = require('querystring');
 var Chart = require('./test-chart');
 
+
+// NOT USED ATM
 module.exports = React.createClass({
   getInitialState: function(){
     return {state:"stopped",tests:[]};

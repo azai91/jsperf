@@ -1,4 +1,6 @@
 
+
+// figures out platform information
 var platform = (function(root) {
   // Platform info object
   var p = {

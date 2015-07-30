@@ -20,6 +20,8 @@ app.get('/',function(req,res){
   res.sendFile(__dirname+'/client/index.html');
 });
 
+
+// reruns browserify when requesting index.js
 app.get('/index.js',function(req,res){
   res.status(200).set('content-type','application/javascript');
   browserify(__dirname+'/client/index.jsx',{extensions:['.jsx']})

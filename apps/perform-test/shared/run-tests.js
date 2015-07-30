@@ -8,6 +8,8 @@ module.exports = function(gistInfo,setup,scripts,teardown,next){
   var tests = scripts.map(function(script){
     var context = {ref_holder:{}};
 //    console.log(setup);
+
+    // create virtual machine to not allow developer access to window
     vm.runInNewContext(
       'ref_holder.value = function(){'+
       (setup.content||"")+'\n'+

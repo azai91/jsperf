@@ -4,28 +4,34 @@ var Script = require('./script');
 var getGist = require('../shared/get-gist');
 var Chart = require('./charts/c3-chart');
 var sa = require('superagent');
+var qs = require('querystring');
 
 module.exports = React.createClass({
   getInitialState:function(){
     return {setup:"",scripts:[],teardown:"", data:[]};
-  }, componentDidMount: function(){
+  },
+  componentDidMount: function(){
     var _this = this;
     getGist(this.props.repoId,function(err,res){
       if(err) throw err;
-      sa.get('/benchmark-test',function(err,ari){
+      sa.get('/benchmark-test').query(qs.stringify({'gist.id':res.id, 'gist.version' : res.version })).end(function(err,ari){
         console.log(err,ari);
         if(err) throw err;
         res.benchmarks = ari.body;
         _this.setState(res);
       });
     });
-  }, forkTests: function(){
+  },
+  forkTests: function(){
     window.location = this.state.raw.html_url;
-  }, retHz: function(test){
+  },
+  retHz: function(test){
     return test.test.hz;
-  }, testGroups: function(test){
+  },
+  testGroups: function(test){
     return test.test.title;
-  }, render: function(){
+  },
+  render: function(){
     return (<div>
       <button onClick={this.forkTests} >Fork</button>
       <Tester

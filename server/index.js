@@ -1,12 +1,17 @@
+// makes sure that configuration file can be found
 process.env.GETCONFIG_ROOT = __dirname+'/config';
 
 var path = require('path');
+
+// make root and apps dir available as a global
 global.__root = path.resolve(__dirname,'..');
 global.__apps = path.resolve(__root,'./apps');
 
 var db = require('./database');
 var express = require('express');
 var mongooseAPI = require(__apps+'/node_modules/mongoose-api');
+
+// after connecting to database, start express server
 db(function(err){
   if(err) throw err;
   var app = express();

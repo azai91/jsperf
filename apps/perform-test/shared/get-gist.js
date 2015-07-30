@@ -12,11 +12,14 @@ var getTitle = /^\/\/ *Title: *(\S.*)$/;
 module.exports = function(gistId,next){
   console.log(process.env.GITHUB_CLIENT);
   // TODO: Have the user login before hand
+  // https://developer.github.com/v3/gists/#get-a-single-gist
   sa.get('http://api.github.com/gists/'+gistId,JSON.parse(process.env.GITHUB_CLIENT),function(err,res){
     if(err) return next(err);
     var setup = "";
     var scripts = [];
     var teardown = "";
+
+    // go through each file and put content into startip, teardown, tests
     async.each(Object.keys(res.body.files),function(filename,next){
       var file = res.body.files[filename];
       file.filename = filename;
@@ -33,6 +36,7 @@ module.exports = function(gistId,next){
           res(response.text)
         });
       }).then(function(content){
+        // TODO: check size of truncated file
         var splitText = content.split('\n');
         var title,i=0;
         while(!title && i < splitText.length) title = getTitle.exec(splitText[i++]);

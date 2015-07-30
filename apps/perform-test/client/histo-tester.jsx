@@ -6,11 +6,14 @@ var async = require('async');
 module.exports = React.createClass({
   getInitialState: function(){
     return {tests:[]};
-  },componentDidMount: function(){
+  },
+  componentDidMount: function(){
     var _this = this;
     var i = 0;
     async.whilst(function(){ return true;},function(next){
       if(!_this.props.gistInfo.id) return setTimeout(next,100);
+
+      // TODO: make object
       runTests(_this.props.gistInfo,
         _this.props.setup,_this.props.scripts,_this.props.teardown,
         function(e,tests){
@@ -28,7 +31,8 @@ module.exports = React.createClass({
     },function(){
       throw new Error('this should never happen');
     });
-  },render: function(){
+  },
+  render: function(){
     return (<div>
       <h1>{this.state.state}</h1>
     </div>);

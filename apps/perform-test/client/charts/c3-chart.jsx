@@ -7,10 +7,12 @@ module.exports = React.createClass({
   getInitialState: function(){
     if(!this.props.data || this.props.data.length === 0) return {sorted:[]};
     return this.handleData(this.props);
-  },componentWillReceiveProps:function(props){
+  },
+  componentWillReceiveProps:function(props){
     if(!this.props.data || props.data.length === 0) return;
     return this.setState(this.handleData(props));
-  },handleData:function(props){
+  },
+  handleData:function(props){
     var x_access = props.xAccessor;
     var sorted = props.data.sort(function(a,b){
       return x_access(a) - x_access(b);
@@ -29,7 +31,8 @@ module.exports = React.createClass({
       mean: mean,
       segment: segment
     };
-  },shouldComponentUpdate: function(nextProps, nextState) {
+  },
+  shouldComponentUpdate: function(nextProps, nextState) {
     if(!nextProps.data || nextProps.data.length === 0) return false;
     var state = this.handleData(nextProps);
     var histogram = [];
@@ -82,9 +85,11 @@ module.exports = React.createClass({
     });
 //    this.chart.groups([gnames]);
     return false;
-  },render: function(){
+  },
+  render: function(){
     return <div></div>;
-  },componentDidMount: function(){
+  },
+  componentDidMount: function(){
     this.chart = c3.generate({
       bindto: React.findDOMNode(this),
       data: { x: 'x', columns: [['x']] },

@@ -3,6 +3,8 @@ module.exports = function(next){
   var url = "mongodb://localhost:27017";
 
   mongoose.connect(url);
+
+  // need reference to function to remove listener
   var erlist,oplist;
   mongoose.connection.once( "error", erlist = function(err){
     mongoose.connection.removeListener("open",oplist);
